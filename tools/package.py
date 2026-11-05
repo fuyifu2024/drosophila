@@ -22,6 +22,7 @@ def main():
     shutil.copy2(args.binary, bundle / args.binary.name)
     for name in ['README.md', 'LICENSE', 'CREDITS.md', 'THIRD_PARTY_NOTICES.md', 'start.sh', 'start.command']:
         shutil.copy2(ROOT / name, bundle / name)
+    shutil.copytree(ROOT / 'licenses', bundle / 'licenses')
     (bundle / 'data').mkdir()
     for name in ['brain.bin', 'points.bin', 'labels.json', 'README.md', 'SHA256SUMS']:
         shutil.copy2(ROOT / 'data' / name, bundle / 'data' / name)

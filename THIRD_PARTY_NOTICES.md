@@ -28,4 +28,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 Rust dependency names, versions and checksums are recorded in Cargo.lock.
-Their source crates carry their respective upstream licenses.
+Copies of their upstream license texts are retained in licenses/ and included
+in every portable archive. Optional dependencies listed by Cargo.lock may not
+be linked on every platform.
