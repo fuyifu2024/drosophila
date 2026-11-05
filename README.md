@@ -75,7 +75,9 @@ fallback. `--data DIR` overrides discovery.
 - Fly: three body volumes, two eyes, two wings and six articulated legs.
   Shared geometry and instancing reduce the fly to **5 draw calls**, including
   the 18 animated leg segments. Bristles, wing veins, tiny appendages and
-  decorative body segments are omitted.
+  decorative body segments are omitted. The local predecessor used 78 drawable
+  objects and 10,334 triangles; this model uses 5 batches and 884 triangles
+  (geometry counts, not a frame-rate benchmark).
 - World: one floor, a coarse grid, a room outline, three pillars, four food
   patches, twelve pebbles and one lamp. Obstacles use the same dimensions as
   collision detection. Repeated objects are instanced.

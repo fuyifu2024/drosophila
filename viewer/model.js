@@ -81,7 +81,7 @@ export function buildFly() {
     });
   }
   const wingGeo = new THREE.CircleGeometry(1, 12);
-  const wingMat = new THREE.MeshBasicMaterial({ color: 0xc2dcea, transparent: true, opacity: 0.5, side: THREE.DoubleSide, depthWrite: false });
+  const wingMat = new THREE.MeshBasicMaterial({ color: 0xc2dcea, transparent: true, opacity: 0.5, side: THREE.DoubleSide, depthWrite: false, forceSinglePass: true });
   const wings = [1, -1].map(side => {
     const pivot = new THREE.Group();
     pivot.position.set(-0.04, side * 0.16, 0.26);
