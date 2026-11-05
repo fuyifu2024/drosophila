@@ -1,0 +1,6 @@
+{
+  "name": "drosophila-viewer",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node tests/viewer.test.mjs" }
+}

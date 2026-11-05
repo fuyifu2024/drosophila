@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>drosophila · a small fly world</title>
+<style>
+  :root { color-scheme: dark; font: 13px/1.6 ui-monospace, SFMono-Regular, Consolas, monospace; color: #dbe5ec; background: #111923; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  [hidden] { display: none !important; }
+  #view { display: block; width: 100vw; height: 100vh; }
+  #hud { position: fixed; top: 16px; left: 18px; pointer-events: none; text-shadow: 0 1px 3px #111923; }
+  h1 { margin: 0 0 4px; font: inherit; font-size: 18px; letter-spacing: .04em; }
+  #h-brain, #status { color: #9eafbd; }
+  #h-fps { color: #b5c6d1; }
+  #help { position: fixed; bottom: 14px; left: 18px; display: flex; flex-wrap: wrap; gap: 8px; max-width: calc(100vw - 36px); }
+  button { font: inherit; color: #dbe5ec; background: #192731; border: 1px solid #4a6170; border-radius: 6px; padding: 5px 10px; cursor: pointer; }
+  button:hover, button[aria-pressed=true] { background: #314956; }
+  button:focus-visible { outline: 2px solid #ffd57d; outline-offset: 3px; }
+  #closing { position: fixed; inset: 0; display: grid; place-items: center; background: #111923; padding: 24px; text-align: center; }
+  .error { color: #ffc18b !important; }
+  @media (max-width: 500px) { :root { font-size: 11px; } #hud { top: 10px; left: 12px; } #help { left: 12px; } }
+</style>
+</head>
+<body>
+<canvas id="view" aria-label="A simulated fruit fly in a 3D room"></canvas>
+<div id="hud">
+  <h1>drosophila</h1>
+  <div id="h-fly">A small fly world</div>
+  <div id="h-brain">139,255 neurons</div>
+  <div id="h-fps">—</div>
+  <div id="status" role="status" aria-live="polite">Connecting…</div>
+</div>
+<div id="help">
+  <button id="camera-toggle" type="button">Camera · C</button>
+  <button id="brain-toggle" type="button" aria-pressed="false">Brain · B</button>
+</div>
+<div id="closing">Connecting to the simulator…</div>
+<script type="module" src="./app.js"></script>
+</body>
+</html>

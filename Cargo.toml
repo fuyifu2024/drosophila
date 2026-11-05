@@ -1,0 +1,22 @@
+[package]
+name = "drosophila"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+license = "MIT"
+description = "A 3D world with a fruit fly whose brain is the real FlyWire connectome."
+repository = "https://github.com/fuyifu2024/drosophila"
+
+[dependencies]
+anyhow = "1"
+flate2 = "1"
+
+# The whole point of this program is 139k neurons at 1 kHz. Unoptimised that is
+# not slow, it is unusable.
+[profile.dev]
+opt-level = 2
+
+# The ETL streams ~500 MB of CSV; the sim walks millions of edges per second.
+[profile.release]
+lto = "thin"
+codegen-units = 1

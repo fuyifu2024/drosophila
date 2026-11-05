@@ -1,0 +1,9 @@
+/target/
+/dist/
+/artifacts/
+.DS_Store
+__pycache__/
+*.log
+/data/*.csv.gz
+/data/*.obj
+/data/neuropils/

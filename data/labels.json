@@ -1,0 +1,6 @@
+{
+  "super_class": ["optic", "sensory_ascending", "central", "sensory", "descending", "visual_projection", "visual_centrifugal", "ascending", "endocrine", "motor"],
+  "groups": ["other", "photoreceptor", "T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d", "LPLC2", "LC4", "descending", "motor", "Kenyon", "central_complex", "olfactory", "mechano", "ascending", "visual_projection", "monoamine"],
+  "sides": ["left", "right", "center", "unknown"],
+  "flows": ["intrinsic", "afferent", "efferent", "unknown"]
+}
