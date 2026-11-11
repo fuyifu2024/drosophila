@@ -3,6 +3,7 @@ import { BrainView } from './brain_view.js';
 import { buildFly } from './model.js';
 import { buildWorld } from './world_view.js';
 import { flyAxes, decodeState, loadPoints } from './protocol.js';
+import { interpolate, PendingSpikes } from './playback.js';
 
 const canvas = document.getElementById('view');
 const closing = document.getElementById('closing');
@@ -27,8 +28,9 @@ let brain = null;
 let brainLoading = null;
 let world = null;
 let displayedTick = -1;
+const pendingSpikes = new PendingSpikes();
 let hudAt = 0;
-const state = { lastTick: 0, data: null, receivedAt: 0 };
+const state = { lastTick: 0, data: null, previous: null, receivedAt: 0, intervalMs: 50 };
 let pollTimer = null;
 let polling = false;
 
@@ -41,7 +43,7 @@ async function json(url) {
 async function toggleBrain() {
   brainPanelOpen = !brainPanelOpen;
   document.getElementById('brain-toggle').setAttribute('aria-pressed', String(brainPanelOpen));
-  if (!brainPanelOpen) { if (brain) brain.hide(); return; }
+  if (!brainPanelOpen) { pendingSpikes.clear(); if (brain) brain.hide(); return; }
   if (!brain && !brainLoading) {
     status.textContent = 'Loading brain…';
     brainLoading = Promise.all([loadPoints('/points.bin'), json('/labels.json')])
@@ -62,10 +64,19 @@ async function poll() {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const s = decodeState(await response.arrayBuffer());
     // A restarted simulator has a fresh clock. Request its spikes from zero.
-    if (s.tick < state.lastTick) displayedTick = -1;
+    const receivedAt = performance.now();
+    if (s.tick < state.lastTick) {
+      displayedTick = -1;
+      pendingSpikes.clear();
+      state.previous = null;
+    } else if (s.tick > state.lastTick) {
+      state.previous = state.data;
+      if (state.receivedAt) state.intervalMs = receivedAt - state.receivedAt;
+    }
+    if (brainPanelOpen && s.tick > state.lastTick) pendingSpikes.add(s.spikes);
     state.lastTick = s.tick;
     state.data = s;
-    state.receivedAt = performance.now();
+    state.receivedAt = receivedAt;
     status.textContent = 'Local simulation · connected';
     status.classList.remove('error');
     if (closing.hidden === false) { closing.hidden = true; window.__boot = 'running'; }
@@ -164,7 +175,7 @@ function frame(now) {
 
   fpsFrames++;
   if (now - fpsAt > 500) { fps = fpsFrames * 1000 / (now - fpsAt); fpsFrames = 0; fpsAt = now; }
-  const s = state.data;
+  const s = state.data && interpolate(state.previous, state.data, now - state.receivedAt, state.intervalMs);
   if (s) {
     const { forward, left, up } = flyAxes(s.yaw, s.pitch, s.roll);
     // Orientation from the axes themselves rather than from Euler angles, so
@@ -294,7 +305,7 @@ function frame(now) {
     updateCamera(s, dt);
 
     if (brain && brainPanelOpen && s.tick !== displayedTick) {
-      brain.update(s.spikes, s.tick, s.groupHz);
+      brain.update(pendingSpikes.take(), s.tick, s.groupHz);
       displayedTick = s.tick;
     }
     if (now - hudAt > 250) { updateHud(s); hudAt = now; }

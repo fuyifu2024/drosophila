@@ -82,3 +82,26 @@ test('world instances use the simulator dimensions and z-up ground', () => {
   assert.ok(Math.abs(top.y) < 1e-5);
   assert.ok(Math.abs(top.z - 120) < 1e-5);
 });
+
+test('interpolation follows the shortest rotation and stops at the latest position', async () => {
+  const { interpolate } = await import('../viewer/playback.js');
+  const a = { tick: 10, pos: [0, 0, 0], yaw: 3.1, pitch: 0, roll: 0, wingFold: 0, wing: 0 };
+  const b = { ...a, tick: 60, pos: [10, 2, 0], yaw: -3.1 };
+  const mid = interpolate(a, b, 25, 50);
+  assert.equal(mid.pos[0], 5);
+  assert.ok(Math.abs(Math.abs(mid.yaw) - Math.PI) < 0.01);
+  assert.equal(interpolate(a, b, 200, 50).pos[0], 10);
+  assert.equal(interpolate(null, b, 0, 50), b);
+});
+
+test('spikes from multiple responses survive until the next rendered frame', async () => {
+  const { PendingSpikes } = await import('../viewer/playback.js');
+  const pending = new PendingSpikes();
+  pending.add([1, 3]);
+  pending.add([2, 3]);
+  assert.deepEqual([...pending.take()], [1, 3, 2]);
+  assert.equal(pending.take().length, 0);
+  pending.add([10]);
+  pending.clear();
+  assert.equal(pending.take().length, 0);
+});

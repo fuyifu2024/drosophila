@@ -56,7 +56,7 @@ def main():
                 else:
                     raise AssertionError('server never became ready')
                 assert b'brain-toggle' in page
-                for asset in ['app.js', 'model.js', 'world_view.js', 'protocol.js', 'brain_view.js', 'vendor/three.module.js', 'vendor/three.core.js']:
+                for asset in ['app.js', 'model.js', 'world_view.js', 'protocol.js', 'playback.js', 'brain_view.js', 'vendor/three.module.js', 'vendor/three.core.js']:
                     assert len(get('/' + asset)) > 100, asset
                 world = json.loads(get('/world.json'))
                 assert len(world['pillars']) == 3

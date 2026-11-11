@@ -183,6 +183,7 @@ fn viewer_asset(path: &str) -> Option<&'static [u8]> {
         "/app.js" => Some(include_bytes!("../viewer/app.js")),
         "/model.js" => Some(include_bytes!("../viewer/model.js")),
         "/world_view.js" => Some(include_bytes!("../viewer/world_view.js")),
+        "/playback.js" => Some(include_bytes!("../viewer/playback.js")),
         "/protocol.js" => Some(include_bytes!("../viewer/protocol.js")),
         "/brain_view.js" => Some(include_bytes!("../viewer/brain_view.js")),
         "/vendor/three.module.js" => Some(include_bytes!("../viewer/vendor/three.module.js")),
